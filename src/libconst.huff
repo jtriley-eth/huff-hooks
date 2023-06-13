@@ -1,0 +1,29 @@
+//! # Constants Library
+//!
+//! Contains constants for UniV4 hooks in Huff.
+
+// beforeInitialize(address,(address,address,uint24,int24,address),uint160)
+#define constant SEL_BEFORE_INIT = 0xdc98354e
+
+// afterInitialize(address,(address,address,uint24,int24,address),uint160,int24)
+#define constant SEL_AFTER_INIT = 0x6fe7e6eb
+
+// beforeModifyPosition(address,(address,address,uint24,int24,address),(int24,int24,int256))
+#define constant SEL_BEFORE_MOD = 0x0dbe5dbd
+
+// afterModifyPosition(address,(address,address,uint24,int24,address),(int24,int24,int256),int256)
+#define constant SEL_AFTER_MOD = 0x0e2059f5
+
+// beforeSwap(address,(address,address,uint24,int24,address),(bool,int256,uint160))
+#define constant SEL_BEFORE_SWAP = 0xb3f97f80
+
+// afterSwap(address,(address,address,uint24,int24,address),(bool,int256,uint160),int256)
+#define constant SEL_AFTER_SWAP = 0xa5aa370a
+
+// beforeDonate(address,(address,address,uint24,int24,address),uint256,uint256)
+#define constant SEL_BEFORE_DONATE = 0x4dbb99a6
+
+// afterDonate(address,(address,address,uint24,int24,address),uint256,uint256)
+#define constant SEL_AFTER_DONATE = 0x43c4407e
+
+// TODO: memory layout constants

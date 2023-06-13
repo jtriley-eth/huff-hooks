@@ -1,0 +1,42 @@
+//! # Noop Hook Contract
+//!
+//! Contains no functionality, just hooks.
+
+#include "../libconst.huff"
+#include "../libreturns.huff"
+
+/// ## Main Macro
+///
+/// ### Directives
+///
+/// 1. Extract function selector (LEAVE ON STACK).
+/// 2. Jump to hook by selector.
+/// 3. ???
+/// 4. Return selector from stack.
+///
+/// ### Panics
+///
+/// - If function selector is invalid.
+/// - If function selector is popped off of the stack.
+#define macro MAIN() = takes (0) returns (0) {
+    0x00 calldataload 0xe0 shr
+
+    dup1 [SEL_BEFORE_INIT] eq before_init jumpi
+    dup1 [SEL_AFTER_INIT] eq after_init jumpi
+    dup1 [SEL_BEFORE_MOD] eq before_mod jumpi
+    dup1 [SEL_AFTER_MOD] eq after_mod jumpi
+    dup1 [SEL_BEFORE_SWAP] eq before_swap jumpi
+    dup1 [SEL_AFTER_SWAP] eq after_swap jumpi
+    dup1 [SEL_BEFORE_DONATE] eq before_donate jumpi
+    dup1 [SEL_AFTER_DONATE] eq after_donate jumpi
+    0x00 0x00 revert
+
+    before_init: HOOK_RETURN()
+    after_init: HOOK_RETURN()
+    before_mod: HOOK_RETURN()
+    after_mod: HOOK_RETURN()
+    before_swap: HOOK_RETURN()
+    after_swap: HOOK_RETURN()
+    before_donate: HOOK_RETURN()
+    after_donate: HOOK_RETURN()
+}

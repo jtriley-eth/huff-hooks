@@ -1,0 +1,24 @@
+//! # Returns Library
+//!
+//! Contains return macro for hooks.
+
+/// ## Hook Return Macro
+///
+/// ### Directives
+///
+/// 1. Left-align selector.
+/// 2. Store selector in memory at slot zero.
+/// 3. Return selector from memory.
+///
+/// ### Panics
+///
+/// - If function selector is not on the stack at the start of the macro.
+#define macro HOOK_RETURN() = takes (1) returns (0) {
+    // takes            // [selector]
+    0xe0 shl            // [selector_aligned]
+    0x00                // [memptr, selector_aligned]
+    mstore              // []
+    0x20                // [len]
+    0x00                // [memptr, len]
+    return              // []
+}
