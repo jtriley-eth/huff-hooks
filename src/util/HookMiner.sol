@@ -25,9 +25,6 @@ function hookCalls(
     }
 }
 
-// for (uint nonce; calls != calls & hookAddress; nonce++) {
-//      keccak256(abi.encodePacked(hex"ff", C2_FACTORY, nonce, initcodeHash));
-// }
 function mineHookAddress(address callerAddress, bytes32 initcodeHash, uint160 calls) pure returns (bytes32 nonce) {
     assembly {
         nonce := shl(0x60, callerAddress)
@@ -36,9 +33,12 @@ function mineHookAddress(address callerAddress, bytes32 initcodeHash, uint160 ca
         mstore(add(memptr, 0x01), shl(0x60, C2_FACTORY))
         mstore(add(memptr, 0x35), initcodeHash)
 
-        for { let hookAddress } iszero(eq(calls, and(calls, hookAddress))) { nonce := add(nonce, 0x01) } {
-            mstore(add(memptr, 0x15), nonce)
-            hookAddress := keccak256(memptr, 0x55)
+        for {} 1 { nonce := add(nonce, 0x01) } {
+            mstore(add(memptr, 21), nonce)
+            let hookAddress := keccak256(memptr, 0x55)
+            if eq(calls, and(calls, hookAddress)) {
+              break
+            }
         }
     }
 }
