@@ -1,0 +1,12 @@
+//! # Geomean Oracle Hook
+//!
+//! A hook for Uniswap v4 pool to act as oracles.
+//!
+//! > Notice: Pools with this hook must have full range tick spacing and liquidity is always
+//! > permanently locked in these pools.
+//!
+//! This is thee suggested configuration for protocols using a Uniswap v3 style geomean oracle.
+
+#include "./libabi.huff"
+
+

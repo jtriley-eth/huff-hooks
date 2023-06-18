@@ -1,0 +1,206 @@
+//! # Geomean Oracle ABI
+//!
+//! Selector checkers and calldata layout specification for the Geomean Oracle.
+
+
+/// `getObservation((address,address,uint24,int24,address),uint256)`
+#define constant GET_OBS_SEL = 0xefb40e57
+
+/// `getState((address,address,uint24,int24,address))`
+#define constant GET_STATE_SEL = 0xe3b077a1
+
+/// beforeInitialize(address,(address,address,uint24,int24,address),uint160)
+#define constant BEFORE_INIT_SEL = 0xdc98354e
+
+/// afterInitialize(address,(address,address,uint24,int24,address),uint160,int24)
+#define constant AFTER_INIT_SEL = 0x6fe7e6eb
+
+/// beforeModifyPosition(address,(address,address,uint24,int24,address),(int24,int24,int256))
+#define constant BEFORE_MOD_SEL = 0x0dbe5dbd
+
+// beforeSwap(address,(address,address,uint24,int24,address),(bool,int256,uint160))
+#define constant BEFORE_SWAP_SEL = 0xb3f97f80
+
+/// `observe((address,address,uint24,int24,address),uint32[])`
+#define constant OBS_SEL = 0xf96f97f2
+
+/// `increaseCardinalityNext((address,address,uint24,int24,address),uint16)`
+#define constant INC_CARD_NXT_SEL = 0x8f1c9217
+
+/// ## Is Get Observation Call.
+///
+/// ### Calldata Layout
+///
+/// `selector . key_currency0 . key_currency1 . key_fee . key_tickspacing . key_hooks . index`
+///
+/// | name            | size (bytes) |
+/// | --------------- | ------------ |
+/// | selector        | 4            |
+/// | key_currency0   | 32           |
+/// | key_currency1   | 32           |
+/// | key_fee         | 32           |
+/// | key_tickspacing | 32           |
+/// | key_hooks       | 32           |
+/// | index           | 32           |
+#define macro IS_GET_OBS() = takes (1) returns (0) {
+    // takes:       // [sel]
+    [GET_OBS_SEL]   // [get_obs_sel, sel]
+    eq              // [is_get_obs]
+}
+
+/// ## Is Get State Call.
+///
+/// ### Calldata Layout
+///
+/// `selector . key_currency0 . key_currency1 . key_fee . key_tickspacing . key_hooks`
+///
+/// | name            | size (bytes) |
+/// | --------------- | ------------ |
+/// | selector        | 4            |
+/// | key_currency0   | 32           |
+/// | key_currency1   | 32           |
+/// | key_fee         | 32           |
+/// | key_tickspacing | 32           |
+/// | key_hooks       | 32           |
+#define macro IS_GET_STATE() = takes (1) returns (0) {
+    // takes:       // [sel]
+    [GET_STATE_SEL] // [get_state_sel, sel]
+    eq              // [is_get_state]
+}
+
+/// ## Is Before Initialize Call.
+///
+/// ### Calldata Layout
+///
+/// `selector . initializer . key_currency0 . key_currency1 . key_fee . key_tickspacing . key_hooks . sqrtPriceX96`
+///
+/// | name            | size (bytes) |
+/// | --------------- | ------------ |
+/// | selector        | 4            |
+/// | initializer     | 32           |
+/// | key_currency0   | 32           |
+/// | key_currency1   | 32           |
+/// | key_fee         | 32           |
+/// | key_tickspacing | 32           |
+/// | key_hooks       | 32           |
+/// | sqrtPriceX96    | 32           |
+#define macro IS_BEFORE_INIT() = takes (1) returns (0) {
+    // takes:           // [sel]
+    [BEFORE_INIT_SEL]   // [before_init_sel, sel]
+    eq                  // [is_before_init]
+}
+
+/// ## Is After Initialize Call.
+///
+/// ### Calldata Layout
+///
+/// `selector . initializer . key_currency0 . key_currency1 . key_fee . key_tickspacing . key_hooks . sqrtPriceX96 . tick`
+///
+/// | name            | size (bytes) |
+/// | --------------- | ------------ |
+/// | selector        | 4            |
+/// | initializer     | 32           |
+/// | key_currency0   | 32           |
+/// | key_currency1   | 32           |
+/// | key_fee         | 32           |
+/// | key_tickspacing | 32           |
+/// | key_hooks       | 32           |
+/// | sqrtPriceX96    | 32           |
+/// | tick            | 32           |
+#defne macro IS_AFTER_INIT() = takes (1) returns (0) {
+    // takes:           // [sel]
+    [AFTER_INIT_SEL]    // [after_init_sel, sel]
+    eq                  // [is_after_init]
+}
+
+/// ## Is Before Modify Position Call.
+///
+/// ### Calldata Layout
+///
+/// `selector . modifier . key_currency0 . key_currency1 . key_fee . key_tickspacing . key_hooks . mod_tickLower . mod_tickUpper . mod_delta`
+///
+/// | name            | size (bytes) |
+/// | --------------- | ------------ |
+/// | selector        | 4            |
+/// | modifier        | 32           |
+/// | key_currency0   | 32           |
+/// | key_currency1   | 32           |
+/// | key_fee         | 32           |
+/// | key_tickspacing | 32           |
+/// | key_hooks       | 32           |
+/// | mod_tickLower   | 32           |
+/// | mod_tickUpper   | 32           |
+/// | mod_delta       | 32           |
+#define macro IS_BEFORE_MOD() = takes (1) returns (0) {
+    // takes:           // [sel]
+    [BEFORE_MOD_SEL]    // [before_mod_sel, sel]
+    eq                  // [is_before_mod]
+}
+
+/// ## Is Before Swap Call.
+///
+/// ### Calldata Layout
+///
+/// `selector . swapper . key_currency0 . key_currency1 . key_fee . key_tickspacing . key_hooks . swap_zeroforone . swap_amountspeficied . swap_sqrtPriceLimitX96`
+///
+/// | name                   | size (bytes) |
+/// | ---------------------- | ------------ |
+/// | selector               | 4            |
+/// | swapper                | 32           |
+/// | key_currency0          | 32           |
+/// | key_currency1          | 32           |
+/// | key_fee                | 32           |
+/// | key_tickspacing        | 32           |
+/// | key_hooks              | 32           |
+/// | swap_zeroforone        | 32           |
+/// | swap_amountspeficied   | 32           |
+/// | swap_sqrtPriceLimitX96 | 32           |
+#define macro IS_BEFORE_SWAP() = takes (1) returns (0) {
+    // takes:           // [sel]
+    [BEFORE_SWAP_SEL]   // [before_swap_sel, sel]
+    eq                  // [is_before_swap]
+}
+
+/// ## Is Observe Call.
+///
+/// ### Calldata Layout
+///
+/// `selector . key_currency0 . key_currency1 . key_fee . key_tickspacing . key_hooks . secondsagos_ptr . secondsagos_len . (secondsago)+`
+///
+/// | name            | size (bytes)                  |
+/// | --------------- | ----------------------------- |
+/// | selector        | 4                             |
+/// | key_currency0   | 32                            |
+/// | key_currency1   | 32                            |
+/// | key_fee         | 32                            |
+/// | key_tickspacing | 32                            |
+/// | key_hooks       | 32                            |
+/// | secondsagos_ptr | 32                            |
+/// | secondsagos_len | 32                            |
+/// | (secondsago)+   | 32 * secondsagos_len          |
+#define macro IS_OBS() = takes (1) returns (0) {
+    // takes:           // [sel]
+    [OBS_SEL]           // [obs_sel, sel]
+    eq                  // [is_obs]
+}
+
+/// ## Is Increase Cardinality Next Call.
+///
+/// ### Calldata Layout
+///
+/// `selector . key_currency0 . key_currency1 . key_fee . key_tickspacing . key_hooks . cardinalitynext`
+///
+/// | name            | size (bytes) |
+/// | --------------- | ------------ |
+/// | selector        | 4            |
+/// | key_currency0   | 32           |
+/// | key_currency1   | 32           |
+/// | key_fee         | 32           |
+/// | key_tickspacing | 32           |
+/// | key_hooks       | 32           |
+/// | cardinalitynext | 32           |
+#define macro IS_INC_CARD_NXT_SEL() = takes (1) returns (0) {
+    // takes:           // [sel]
+    [INC_CARD_NXT_SEL]  // [inc_card_nxt_sel, sel]
+    eq                  // [is_inc_card_nxt_sel]
+}
