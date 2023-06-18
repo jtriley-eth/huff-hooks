@@ -1,9 +1,9 @@
-//! # Noop Hook Contract
+//! # Base Hook Contract
 //!
 //! Contains no functionality, just hooks.
 
-#include "../libconst.huff"
-#include "../libreturns.huff"
+#include "./libconst.huff"
+#include "./libreturns.huff"
 
 /// ## Main Macro
 ///
